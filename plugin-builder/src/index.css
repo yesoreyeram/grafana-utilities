@@ -9,3 +9,17 @@
 h4 {
   margin-bottom: 20px;
 }
+
+.option-header {
+  width: 100%;
+  text-align: right;
+}
+
+.options {
+  justify-content: flex-end;
+}
+
+.option-remove {
+  margin-left: 5px;
+  margin-top: 2px;
+}
