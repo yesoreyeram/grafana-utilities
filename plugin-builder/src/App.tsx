@@ -73,6 +73,29 @@ function App() {
     setConfig(newConfig);
   }
 
+  const toggleRules = (index: number, checked: boolean) => {
+    const value = checked ? [{key: '', value: '', operand: '==='}] : undefined;
+    const newConfig = cloneDeep(config);
+    set(newConfig, `properties[${index}].showIf`, value);
+    setConfig(newConfig);
+  }
+
+  const addRule = (index: number) => {
+    const newConfig = cloneDeep(config);
+    const options = newConfig.properties[index].showIf || [];
+    options.push({key: '', value: '', operand: '==='});
+    set(newConfig, `properties[${index}].showIf`, options);
+    setConfig(newConfig);
+  }
+
+  const removeRule = (index: number, optIndex: number) => {
+    const newConfig = cloneDeep(config);
+    const options = newConfig.properties[index].showIf || [];
+    const update = options.filter((o, i) => i !== optIndex);
+    set(newConfig, `properties[${index}].showIf`, update);
+    setConfig(newConfig);
+  }
+
   return (
     <div className="container-fluid">
       <br />
@@ -84,7 +107,7 @@ function App() {
         </div>
       </div>
       <div className="row">
-        <div className="col-sm-4">
+        <div className="xcol-sm-4">
           <h4>Configuration Items</h4>
           {config.properties.map((c, index) => (
             <div className="gf-form" key={JSON.stringify(c)}>
@@ -166,6 +189,8 @@ function App() {
             </Button>
           </div>
           <br />
+
+          {/* General Options Section */}
           <h4>General options</h4>
           <div className="gf-form">
             <InlineFormLabel width={12}>
@@ -195,12 +220,14 @@ function App() {
             />
           </div>
         </div>
-        <div className="col-sm-4">
+
+        {/* Properties Section */}
+        <div className="xcol-sm-4">
           {config.properties[activePropertyIndex] ? (
             <>
               <h4>{config.properties[activePropertyIndex].key} Properties</h4>
               <div className="gf-form">
-                <InlineFormLabel>Key</InlineFormLabel>
+                <InlineFormLabel width={6}>Key</InlineFormLabel>
                 <Input
                   css={{}}
                   disabled
@@ -208,7 +235,7 @@ function App() {
                 />
               </div>
               <div className="gf-form">
-                <InlineFormLabel>Label</InlineFormLabel>
+                <InlineFormLabel width={6}>Label</InlineFormLabel>
                 <Input
                   css={{}}
                   value={config.properties[activePropertyIndex].label}
@@ -221,7 +248,7 @@ function App() {
                 />
               </div>
               <div className="gf-form">
-                <InlineFormLabel>Placeholder</InlineFormLabel>
+                <InlineFormLabel width={6}>Placeholder</InlineFormLabel>
                 <Input
                   css={{}}
                   value={config.properties[activePropertyIndex].placeholder}
@@ -234,7 +261,7 @@ function App() {
                 />
               </div>
               <div className="gf-form">
-                <InlineFormLabel>Tooltip</InlineFormLabel>
+                <InlineFormLabel width={6}>Tooltip</InlineFormLabel>
                 <Input
                   css={{}}
                   value={config.properties[activePropertyIndex].tooltip}
@@ -247,7 +274,7 @@ function App() {
                 />
               </div>
               <div className="gf-form">
-                <InlineFormLabel>Is Secure</InlineFormLabel>
+                <InlineFormLabel width={6}>Is Secure</InlineFormLabel>
                 <InlineSwitch
                   css={{}}
                   value={config.properties[activePropertyIndex].secure}
@@ -262,7 +289,7 @@ function App() {
 
               {/* OPTIONS */}
               <div className="gf-form">
-                <InlineFormLabel>Options</InlineFormLabel>
+                <InlineFormLabel width={6}>Options</InlineFormLabel>
                 <InlineSwitch 
                   css={{}} 
                   value={config.properties[activePropertyIndex].options !== undefined}
@@ -316,10 +343,80 @@ function App() {
                     </div>
                   ))
               }
+
+              {/* SHOW IF */}
               <div className="gf-form">
-                <InlineFormLabel>Conditional Rendering?</InlineFormLabel>
-                <InlineSwitch css={{}} />
+                <InlineFormLabel width={6}>Rules</InlineFormLabel>
+                <InlineSwitch 
+                  css={{}} 
+                  value={config.properties[activePropertyIndex].showIf !== undefined}
+                  onChange={(e) => toggleRules(activePropertyIndex, e.currentTarget.checked)} 
+                />
+                <div className="option-header">
+                  {config.properties[activePropertyIndex].showIf !== undefined &&
+                    <Button size="sm" onClick={() => addRule(activePropertyIndex)}>Add</Button>
+                  }
+                </div>
               </div>
+              {config.properties[activePropertyIndex].showIf !== undefined &&
+                  config.properties[activePropertyIndex].showIf?.map((o, i) => (
+                    <div className="gf-form options">
+                      <Input
+                        css={{}}
+                        value={o.key || ""}
+                        // onClick={() => setActivePropertyIndex(i)}
+                        placeholder="Key"
+                        width={15}
+                        onChange={(e) => {
+                          setActivePropertyIndex(activePropertyIndex);
+                          changeProperty(
+                            `properties[${activePropertyIndex}].showIf[${i}].key`,
+                            e.currentTarget.value
+                          );
+                        }}
+                      />
+                      <Select
+                        onChange={(e) => {
+                          setActivePropertyIndex(activePropertyIndex);
+                          changeProperty(
+                            `properties[${activePropertyIndex}].showIf[${i}].operand`,
+                            String(e.value)
+                          );
+                        }}
+                        options={[
+                          { value: "===", label: "=" },
+                          { value: "!==", label: "!=" },
+                          { value: "in", label: "in" },
+                          { value: "notin", label: "!in" },
+                        ]}
+                        value={o.operand}
+                        width={4}
+                      />
+                      <Input
+                        css={{}}
+                        value={String(o.value)}
+                        // onClick={() => setActivePropertyIndex(i)}
+                        placeholder="Value"
+                        width={15}
+                        onChange={(e) => {
+                          setActivePropertyIndex(activePropertyIndex);
+                          changeProperty(
+                            `properties[${activePropertyIndex}].showIf[${i}].value`,
+                            e.currentTarget.value
+                          );
+                        }}
+                      />
+                      <Button
+                        className="option-remove"
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => removeRule(activePropertyIndex, i)}
+                      >
+                        x
+                      </Button>
+                    </div>
+                  ))
+              }
             </>
           ) : (
             <>No props</>
