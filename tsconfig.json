@@ -1,0 +1,10 @@
+{
+  "extends": "@grafana/tsconfig",
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "lib"],
+  "compilerOptions": {
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "typeRoots": ["./node_modules/@types"]
+  }
+}

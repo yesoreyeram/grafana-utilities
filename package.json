@@ -1,0 +1,31 @@
+{
+  "name": "grafana-utils",
+  "version": "0.0.6",
+  "description": "Utility functions and components for Grafana plugin development",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "rm -rf ./lib && tsc",
+    "prepare": "yarn build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "grafana"
+  ],
+  "author": "Sriramajeyam Sugumaran",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@grafana/tsconfig": "^1.0.0-rc1",
+    "@types/lodash": "^4.14.170",
+    "@types/react": "^17.0.11",
+    "@types/react-dom": "^17.0.8",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "typescript": "^4.3.4"
+  },
+  "dependencies": {
+    "@grafana/data": "7.2.0",
+    "@grafana/ui": "7.2.0",
+    "lodash": "^4.17.21",
+    "tslib": "^2.3.0"
+  }
+}
