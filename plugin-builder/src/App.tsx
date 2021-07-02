@@ -8,10 +8,13 @@ import {
   InlineSwitch,
   RadioButtonGroup,
 } from "@grafana/ui";
-import {
-  NoCodeConfigComponent,
-  GrafanaDatasourceConfigProps,
-} from "grafana-utils";
+// import {
+//   NoCodeConfigComponent,
+//   GrafanaDatasourceConfigProps,
+// } from "grafana-utils";
+
+import { GrafanaDatasourceConfigProps, NoCodeConfigComponent } from './components/NoCodeConfig';
+
 
 function App() {
   const [config, setConfig] = useState<GrafanaDatasourceConfigProps>({
@@ -108,7 +111,7 @@ function App() {
       </div>
       <div className="row">
         <div className="xcol-sm-4">
-          <h4>Configuration Items</h4>
+          <h4>Form Controls</h4>
           {config.properties.map((c, index) => (
             <div className="gf-form" key={JSON.stringify(c)}>
               <InlineFormLabel width={3}>Key</InlineFormLabel>
@@ -185,7 +188,7 @@ function App() {
             style={{ marginBlockStart: "15px", marginBlockEnd: "20px" }}
           >
             <Button variant="primary" size="sm" onClick={addConfigItem}>
-              Add Config Item
+              Add Form Control
             </Button>
           </div>
           <br />
@@ -422,13 +425,15 @@ function App() {
             <>No props</>
           )}
         </div>
+
+        {/* Preview Section */}
         <div className="col-sm-4">
           <h4>Preview</h4>
           <RadioButtonGroup
             options={[
               { value: "json", label: "JSON Preview" },
               { value: "code", label: "Config Editor Code" },
-              // { value: "component", label: "Component Preview" },
+              { value: "component", label: "Component Preview" },
             ]}
             value={previewMode}
             onChange={(e) => setPreviewMode(e)}
@@ -441,6 +446,8 @@ function App() {
               <>
                 <NoCodeConfigComponent
                   options={{
+                    uid: '1',
+                    typeName: '',
                     id: 1,
                     orgId: 1,
                     name: "",
