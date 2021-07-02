@@ -1,0 +1,11 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css");
+@import url("https://grafana-assets.grafana.net/grafana/8.0.3/public/build/grafana.dark.b48e43a537fa1ff3a6de.css");
+
+.display-1 {
+  background-image: url("https://play.grafana.org/public/img/login_background_dark.svg");
+  font-size: 200%;
+  margin-block-end: 20px !important;
+}
+h4 {
+  margin-bottom: 20px;
+}
