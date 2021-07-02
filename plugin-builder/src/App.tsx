@@ -49,6 +49,30 @@ function App() {
     set(newConfig, key, value);
     setConfig(newConfig);
   };
+
+  const toggleOptions = (index: number, checked: boolean) => {
+    const value = checked ? [{label: '', value: ''}] : undefined;
+    const newConfig = cloneDeep(config);
+    set(newConfig, `properties[${index}].options`, value);
+    setConfig(newConfig);
+  }
+
+  const addOption = (index: number) => {
+    const newConfig = cloneDeep(config);
+    const options = newConfig.properties[index].options || [];
+    options.push({label: '', value: ''});
+    set(newConfig, `properties[${index}].options`, options);
+    setConfig(newConfig);
+  }
+
+  const removeOption = (index: number, optIndex: number) => {
+    const newConfig = cloneDeep(config);
+    const options = newConfig.properties[index].options || [];
+    const update = options.filter((o, i) => i !== optIndex);
+    set(newConfig, `properties[${index}].options`, update);
+    setConfig(newConfig);
+  }
+
   return (
     <div className="container-fluid">
       <br />
@@ -235,10 +259,63 @@ function App() {
                   }
                 />
               </div>
+
+              {/* OPTIONS */}
               <div className="gf-form">
                 <InlineFormLabel>Options</InlineFormLabel>
-                <InlineSwitch css={{}} />
+                <InlineSwitch 
+                  css={{}} 
+                  value={config.properties[activePropertyIndex].options !== undefined}
+                  onChange={(e) => toggleOptions(activePropertyIndex, e.currentTarget.checked)} 
+                />
+                <div className="option-header">
+                  {config.properties[activePropertyIndex].options !== undefined &&
+                    <Button size="sm" onClick={() => addOption(activePropertyIndex)}>Add</Button>
+                  }
+                </div>
               </div>
+              {config.properties[activePropertyIndex].options !== undefined &&
+                  config.properties[activePropertyIndex].options?.map((o, i) => (
+                    <div className="gf-form options">
+                      <Input
+                        css={{}}
+                        value={o.label || ""}
+                        // onClick={() => setActivePropertyIndex(i)}
+                        placeholder="Label"
+                        width={15}
+                        onChange={(e) => {
+                          setActivePropertyIndex(activePropertyIndex);
+                          changeProperty(
+                            `properties[${activePropertyIndex}].options[${i}].label`,
+                            e.currentTarget.value
+                          );
+                        }}
+                      />
+                      <Input
+                        css={{}}
+                        value={o.value || ""}
+                        // onClick={() => setActivePropertyIndex(i)}
+                        placeholder="Value"
+                        width={15}
+                        onChange={(e) => {
+                          setActivePropertyIndex(activePropertyIndex);
+                          changeProperty(
+                            `properties[${activePropertyIndex}].options[${i}].value`,
+                            e.currentTarget.value
+                          );
+                        }}
+                      />
+                      <Button
+                        className="option-remove"
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => removeOption(activePropertyIndex, i)}
+                      >
+                        x
+                      </Button>
+                    </div>
+                  ))
+              }
               <div className="gf-form">
                 <InlineFormLabel>Conditional Rendering?</InlineFormLabel>
                 <InlineSwitch css={{}} />
