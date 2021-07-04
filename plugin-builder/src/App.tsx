@@ -140,7 +140,7 @@ function App() {
       <div className="row">
         {/* Configuration list */}
         <div className="xcol-sm-5">
-          <h4>Form Controls</h4>
+          <h4>Config Keys</h4>
           <div className="gf-form">
             <InlineFormLabel width={10}>Key</InlineFormLabel>
             <InlineFormLabel width={10}>Label</InlineFormLabel>
@@ -407,7 +407,29 @@ function App() {
                     </Button>
                   </div>
                 ))}
-
+              {!config.properties[activePropertyIndex].secure &&
+              config.properties[activePropertyIndex].options &&
+              config.properties[activePropertyIndex].options?.length ? (
+                <>
+                  <div className="gf-form">
+                    <InlineFormLabel width={8}>
+                      Use Radio Button
+                    </InlineFormLabel>
+                    <InlineSwitch
+                      css={{}}
+                      value={config.properties[activePropertyIndex].useRadio}
+                      onChange={(e) =>
+                        changeProperty(
+                          `properties[${activePropertyIndex}].useRadio`,
+                          e.currentTarget.checked
+                        )
+                      }
+                    />
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
               {/* SHOW IF */}
               <div className="gf-form">
                 <InlineFormLabel width={6}>Rules</InlineFormLabel>
