@@ -323,6 +323,21 @@ function App() {
                   }
                 />
               </div>
+              {config.properties[activePropertyIndex].type === "string" && (
+                <div className="gf-form">
+                  <InlineFormLabel width={6}>Multiline</InlineFormLabel>
+                  <InlineSwitch
+                    css={{}}
+                    value={config.properties[activePropertyIndex].multiLine}
+                    onChange={(e) =>
+                      changeProperty(
+                        `properties[${activePropertyIndex}].multiLine`,
+                        e.currentTarget.checked
+                      )
+                    }
+                  />
+                </div>
+              )}
               <div className="gf-form">
                 <InlineFormLabel width={6}>Is Secure</InlineFormLabel>
                 <InlineSwitch
